@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Search, Star, GitFork, Github, AlertCircle, ChevronLeft } from 'lucide-react';
 import { getRepoInfo, getStargazers, getForks, getUserRepos, parseInput } from './lib/github';
 import type { GithubUser, RepoInfo } from './types';
@@ -68,7 +69,7 @@ function App() {
       if (forksData.length < 30) setHasMoreForks(false);
       
       setView('repo-details');
-    } catch (err: any) {
+    } catch (err: unknown) {
       handleError(err);
     } finally {
       setLoading(false);
@@ -85,18 +86,18 @@ function App() {
       setUserRepos(repos);
       if (repos.length < 30) setHasMoreRepos(false);
       setView('user-repos');
-    } catch (err: any) {
+    } catch (err: unknown) {
       handleError(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleError = (err: any) => {
+  const handleError = (err: unknown) => {
     console.error(err);
-    if (err.response?.status === 404) {
+    if (axios.isAxiosError(err) && err.response?.status === 404) {
       setError('User or repository not found.');
-    } else if (err.response?.status === 403) {
+    } else if (axios.isAxiosError(err) && err.response?.status === 403) {
       setError('API rate limit exceeded. Please try again later.');
     } else {
       setError('An error occurred while fetching data.');
@@ -172,7 +173,7 @@ function App() {
             <span className="font-bold text-lg tracking-tight">whoStared</span>
           </div>
           <a
-            href="https://github.com/GarvitOfficial/whoAppreciated"
+            href="https://github.com/GarvitOfficial/whoStared"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
