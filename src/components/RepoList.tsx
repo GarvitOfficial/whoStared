@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, GitFork, Calendar, Eye } from 'lucide-react';
+import { Star, GitFork, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import type { RepoInfo } from '../types';
